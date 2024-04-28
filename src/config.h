@@ -3,8 +3,8 @@
 #include <driver/gpio.h>
 
 // WiFi credentials
-#define WIFI_SSID << YOUR_SSID >>
-#define WIFI_PSWD << YOUR_PASSWORD >>
+// #define WIFI_SSID << YOUR_SSID >>
+// #define WIFI_PSWD << YOUR_PASSWORD >>
 
 // sample rate for the system
 #define SAMPLE_RATE 16000
@@ -26,7 +26,7 @@
 #define ADC_MIC_CHANNEL ADC1_CHANNEL_7
 
 // speaker settings
-#define USE_I2S_SPEAKER_OUTPUT
+// #define USE_I2S_SPEAKER_OUTPUT
 #define I2S_SPEAKER_SERIAL_CLOCK GPIO_NUM_18
 #define I2S_SPEAKER_LEFT_RIGHT_CLOCK GPIO_NUM_19
 #define I2S_SPEAKER_SERIAL_DATA GPIO_NUM_5
@@ -34,15 +34,15 @@
 #define I2S_SPEAKER_SD_PIN GPIO_NUM_22
 
 // transmit button
-#define GPIO_TRANSMIT_BUTTON 23
+#define GPIO_TRANSMIT_BUTTON 14
 
 // Which LED pin do you want to use? TinyPico LED or the builtin LED of a generic ESP32 board?
 // Comment out this line to use the builtin LED of a generic ESP32 board
-// #define USE_LED_GENERIC
+#define USE_LED_GENERIC
 
 // Which transport do you want to use? ESP_NOW or UDP?
 // comment out this line to use UDP
-// #define USE_ESP_NOW
+#define USE_ESP_NOW
 
 // On which wifi channel (1-11) should ESP-Now transmit? The default ESP-Now channel on ESP32 is channel 1
 #define ESP_NOW_WIFI_CHANNEL 1
