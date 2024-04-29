@@ -31,10 +31,13 @@
 #define I2S_SPEAKER_LEFT_RIGHT_CLOCK GPIO_NUM_19
 #define I2S_SPEAKER_SERIAL_DATA GPIO_NUM_5
 // Shutdown line if you have this wired up or -1 if you don't
-#define I2S_SPEAKER_SD_PIN GPIO_NUM_22
+#define I2S_SPEAKER_SD_PIN GPIO_NUM_32
 
 // transmit button
 #define GPIO_TRANSMIT_BUTTON 14
+
+// ring button
+#define GPIO_RING_BUTTON 13
 
 // Which LED pin do you want to use? TinyPico LED or the builtin LED of a generic ESP32 board?
 // Comment out this line to use the builtin LED of a generic ESP32 board
@@ -45,7 +48,7 @@
 #define USE_ESP_NOW
 
 // On which wifi channel (1-11) should ESP-Now transmit? The default ESP-Now channel on ESP32 is channel 1
-#define ESP_NOW_WIFI_CHANNEL 1
+#define ESP_NOW_WIFI_CHANNEL 11
 
 // In case all transport packets need a header (to avoid interference with other applications or walkie talkie sets), 
 // specify TRANSPORT_HEADER_SIZE (the length in bytes of the header) in the next line, and define the transport header in config.cpp

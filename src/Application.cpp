@@ -11,6 +11,7 @@
 #include "EspNowTransport.h"
 #include "OutputBuffer.h"
 #include "config.h"
+#include "audio.h"
 
 #ifdef ARDUINO_TINYPICO
 #include "TinyPICOIndicatorLed.h"
@@ -97,6 +98,7 @@ void Application::begin()
   m_indicator_led->set_is_flashing(false, 0x00ff00);
   // setup the transmit button
   pinMode(GPIO_TRANSMIT_BUTTON, INPUT_PULLDOWN);
+  pinMode(GPIO_RING_BUTTON, INPUT_PULLDOWN);
   // start off with i2S output running
   m_output->start(SAMPLE_RATE);
   // start the main task for the application
@@ -111,6 +113,38 @@ void Application::loop()
   // continue forever
   while (true)
   {
+    if (digitalRead(GPIO_RING_BUTTON))
+    {
+      Serial.println("Started transmitting RING");
+      m_indicator_led->set_is_flashing(true, 0xff0000);
+      // stop the output as we're switching into transmit mode
+      m_output->stop();
+      // start the input to get samples from the microphone
+      m_input->start();
+      // transmit for at least 1 second or while the button is pushed
+
+      unsigned long start_time = millis();
+      while (millis() - start_time < 1000 || digitalRead(GPIO_RING_BUTTON))
+      {
+        int samples_read = m_input->read(samples, 128);
+
+        for (int i = 0; i < sizeof(sound) / 2; ++i){
+          if(i % 128 == 0 ){
+            int samples_read = m_input->read(samples, 128);
+          }
+          m_transport->add_sample(sound[i]);
+        }
+      }
+
+      m_transport->flush();
+      // finished transmitting stop the input and start the output
+      Serial.println("Finished transmitting RING");
+      m_indicator_led->set_is_flashing(false, 0xff0000);
+      m_input->stop();
+      m_output->start(SAMPLE_RATE);
+    }
+
+
     // do we need to start transmitting?
     if (digitalRead(GPIO_TRANSMIT_BUTTON))
     {
@@ -146,7 +180,7 @@ void Application::loop()
       digitalWrite(I2S_SPEAKER_SD_PIN, HIGH);
     }
     unsigned long start_time = millis();
-    while (millis() - start_time < 1000 || !digitalRead(GPIO_TRANSMIT_BUTTON))
+    while (millis() - start_time < 1000 || !(digitalRead(GPIO_TRANSMIT_BUTTON) || digitalRead(GPIO_RING_BUTTON)))
     {
       // read from the output buffer (which should be getting filled by the transport)
       m_output_buffer->remove_samples(samples, 128);

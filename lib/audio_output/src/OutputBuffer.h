@@ -89,7 +89,7 @@ public:
         m_buffering = false;
         // just send back the samples we've got and move the read head forward
         int16_t sample = m_buffer[m_read_head];
-        samples[i] = (sample - 128) << 5;
+        samples[i] = (sample - 128) << 8;
         m_read_head = (m_read_head + 1) % m_buffer_size;
         m_available_samples--;
       }

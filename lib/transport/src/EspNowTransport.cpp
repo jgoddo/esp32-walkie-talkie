@@ -4,6 +4,8 @@
 #include <esp_wifi.h>
 #include "OutputBuffer.h"
 #include "EspNowTransport.h"
+#include <esp_wifi_types.h>
+#include <esp_wifi_internal.h>
 
 const int MAX_ESP_NOW_PACKET_SIZE = 250;
 const uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -40,6 +42,9 @@ bool EspNowTransport::begin()
     Serial.printf("ESPNow Init failed: %s\n", esp_err_to_name(result));
     return false;
   }
+  ESP_ERROR_CHECK(esp_wifi_set_protocol( WIFI_IF_STA , WIFI_PROTOCOL_LR));
+  //ESP_ERROR_CHECK(esp_wifi_internal_set_fix_rate(WIFI_IF_STA, true, WIFI_PHY_RATE_LORA_250K));
+
   // this will broadcast a message to everyone in range
   esp_now_peer_info_t peerInfo = {};
   memcpy(&peerInfo.peer_addr, broadcastAddress, 6);
